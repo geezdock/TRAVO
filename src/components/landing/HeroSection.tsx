@@ -1,17 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { SocialProofTicker } from "./SocialProofTicker";
+import { motion } from "framer-motion";
+import { LandingHeader } from "./LandingHeader";
+import { TripBoardPreview } from "./TripBoardPreview";
+import { MarqueeTicker } from "./MarqueeTicker";
 
-const containerVariants = {
+const stagger = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.15 },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
-const itemVariants = {
+const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
@@ -24,62 +26,53 @@ export function HeroSection() {
   const router = useRouter();
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-12 left-12 w-24 h-1 bg-clay" />
-        <div className="absolute top-12 right-12 w-24 h-1 bg-clay" />
-        <div className="absolute bottom-32 left-12 w-1 h-24 bg-clay" />
-        <div className="absolute bottom-32 right-12 w-1 h-24 bg-clay" />
+    <section className="relative h-dvh flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col px-4 max-md:px-2 pt-4 max-w-[1200px] mx-auto w-full min-h-0">
+        <LandingHeader />
+
+        <motion.main
+          className="flex-1 flex flex-col lg:flex-row gap-3 sm:gap-6 lg:gap-8 items-stretch mt-2 sm:mt-4 lg:mt-6 pb-0 min-h-0"
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            className="flex-1 flex flex-col justify-center gap-4 lg:gap-6 lg:pr-8"
+            variants={fadeUp}
+          >
+            <h1 className="font-display text-[28px] max-sm:text-[24px] md:text-6xl lg:text-[64px] font-extrabold leading-[1.1] tracking-tight uppercase text-ink">
+              Plan Trips.
+              <br />
+              Survive the Group Chat.
+            </h1>
+
+            <p className="font-heading text-sm sm:text-base md:text-xl text-ink-light max-w-md leading-relaxed">
+              Ditch the endless scrolling. Align budgets, lock dates, and turn
+              &ldquo;we should go somewhere&rdquo; into an actual trip.
+            </p>
+
+            <div className="mt-2">
+              <button
+                onClick={() => router.push("/auth")}
+                className="brut-btn text-base font-display font-bold uppercase h-14 px-8 shadow-bruted flex items-center justify-center gap-2 w-fit"
+              >
+                Start a Squad
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="flex-1 flex items-center justify-center relative min-h-[280px] sm:min-h-[380px] md:min-h-[450px] lg:min-h-[580px]"
+            variants={fadeUp}
+          >
+            <div className="w-full h-full border-[3px] border-ink rounded-[18px] bg-[#F7F4EF] overflow-hidden relative">
+              <TripBoardPreview />
+            </div>
+          </motion.div>
+        </motion.main>
       </div>
 
-      <motion.div
-        className="flex flex-col items-center gap-8 px-4 max-w-4xl mx-auto text-center"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.h1
-          className="font-display text-[clamp(4rem,15vw,9rem)] font-bold leading-none tracking-tighter text-ink"
-          variants={itemVariants}
-        >
-          TRAVO
-        </motion.h1>
-
-        <motion.p
-          className="font-heading text-lg md:text-xl text-ink-light max-w-xl leading-relaxed"
-          variants={itemVariants}
-        >
-          Stop planning in group chats.
-          <br />
-          <span className="font-semibold text-ink">
-            Start building trips with your squad.
-          </span>
-        </motion.p>
-
-        <motion.div variants={itemVariants}>
-          <button
-            onClick={() => router.push("/auth")}
-            className="brut-btn text-lg px-10 py-4 inline-flex items-center gap-3 group"
-          >
-            <span>Start a Squad</span>
-            <span
-              className="inline-block transition-transform duration-150 group-hover:translate-x-1"
-              aria-hidden="true"
-            >
-              →
-            </span>
-          </button>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-0 w-full"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-      >
-        <SocialProofTicker />
-      </motion.div>
+      <MarqueeTicker />
     </section>
   );
 }
