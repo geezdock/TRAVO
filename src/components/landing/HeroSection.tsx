@@ -54,7 +54,7 @@ export function HeroSection() {
             <div className="mt-2">
               <button
                 onClick={() => router.push("/auth")}
-                className="brut-btn text-base font-display font-bold uppercase h-14 px-8 shadow-bruted flex items-center justify-center gap-2 w-fit"
+                className="brut-btn text-base font-display font-bold uppercase h-12 px-6 shadow-bruted flex items-center justify-center gap-2 w-fit"
               >
                 Start a Squad
               </button>
@@ -62,7 +62,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="flex-1 flex items-center justify-center relative min-h-[280px] sm:min-h-[380px] md:min-h-[450px] lg:min-h-[580px]"
+            className="flex-1 flex items-center justify-center relative min-h-[240px] sm:min-h-[300px] md:min-h-[360px] lg:min-h-[440px]"
             variants={fadeUp}
           >
             <div className="w-full h-full border-[3px] border-ink rounded-[18px] bg-[#F7F4EF] overflow-hidden relative">

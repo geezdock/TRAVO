@@ -9,6 +9,7 @@ import { StageDates } from "./stages/StageDates";
 import { StageAI } from "./stages/StageAI";
 import { StageCelebration } from "./stages/StageCelebration";
 import { StageCTA } from "./stages/StageCTA";
+import { StageTracker } from "./stages/StageTracker";
 
 export function ScrollStory() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,7 @@ export function ScrollStory() {
         <StageAI scrollYProgress={scrollYProgress} />
         <StageCelebration scrollYProgress={scrollYProgress} />
         <StageCTA scrollYProgress={scrollYProgress} />
+        <StageTracker scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

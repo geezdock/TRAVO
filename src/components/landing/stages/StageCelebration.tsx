@@ -121,9 +121,9 @@ export function StageCelebration({
       <div className="w-full max-w-lg mx-auto px-4 text-center">
         <motion.div
           style={{ opacity: cardOpacity, scale: cardScale }}
-          className="border-[3px] border-ink rounded-[20px] bg-white p-4 sm:p-8 shadow-bruted-lg relative"
+          className="border-[3px] border-ink rounded-[20px] bg-white p-4 sm:p-8 shadow-bruted-lg flex flex-col items-center"
         >
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-4 py-1 rounded-full border-[2px] border-ink">
+          <div className="-mt-8 mb-2 bg-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-4 py-1 rounded-full border-[2px] border-ink">
             Boarding Pass
           </div>
 

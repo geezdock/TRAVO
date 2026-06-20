@@ -66,7 +66,7 @@ export function StageTracker({
   scrollYProgress: MotionValue<number>;
 }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-t-[1.5px] border-ink/10 px-2 sm:px-4 py-2">
+    <nav className="absolute bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-t-[1.5px] border-ink/10 px-2 sm:px-4 py-2">
       <div className="max-w-3xl mx-auto flex items-center gap-1 sm:gap-2">
         {stages.map((stage) => (
           <StageTick

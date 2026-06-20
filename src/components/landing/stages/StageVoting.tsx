@@ -77,29 +77,29 @@ function VoteBar({
         <span className="font-heading text-sm sm:text-lg font-bold text-ink w-20 sm:w-28 shrink-0">
           {name}
         </span>
-        <div className="flex-1 relative h-8">
-          <div className="absolute inset-0 bg-clay-light/30 rounded-[6px] overflow-hidden">
+        <div className="flex-1 h-8 rounded-[6px] bg-clay-light/30 overflow-hidden">
+          <div className="grid grid-rows-[1fr] grid-cols-[1fr] h-full items-center">
             <motion.div
               style={{ width: barWidthPct }}
-              className="h-full rounded-[6px] bg-gradient-to-r from-accent to-accent-dark"
+              className="h-full rounded-[6px] bg-gradient-to-r from-accent to-accent-dark row-start-1 col-start-1"
             />
-          </div>
-          <div className="absolute inset-0 flex items-center px-3">
-            <div className="flex items-center gap-1">
-              {relevantFriends.slice(0, 5).map((f, i) => (
-                <FriendAvatar
-                  key={f.name}
-                  friend={f}
-                  barIndex={index}
-                  avatarIndex={i}
-                  localProgress={localProgress}
-                />
-              ))}
-              {relevantFriends.length > 5 && (
-                <span className="font-mono text-[10px] text-white font-bold ml-1">
-                  +{relevantFriends.length - 5}
-                </span>
-              )}
+            <div className="row-start-1 col-start-1 flex items-center px-3 z-10">
+              <div className="flex items-center gap-1">
+                {relevantFriends.slice(0, 5).map((f, i) => (
+                  <FriendAvatar
+                    key={f.name}
+                    friend={f}
+                    barIndex={index}
+                    avatarIndex={i}
+                    localProgress={localProgress}
+                  />
+                ))}
+                {relevantFriends.length > 5 && (
+                  <span className="font-mono text-[10px] text-white font-bold ml-1">
+                    +{relevantFriends.length - 5}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
