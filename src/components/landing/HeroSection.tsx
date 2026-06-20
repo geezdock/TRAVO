@@ -40,7 +40,7 @@ export function HeroSection() {
             className="flex-1 flex flex-col justify-center gap-4 lg:gap-6 lg:pr-8"
             variants={fadeUp}
           >
-            <h1 className="font-display text-[28px] max-sm:text-[24px] md:text-6xl lg:text-[64px] font-extrabold leading-[1.1] tracking-tight uppercase text-ink">
+            <h1 className="font-display text-[24px] max-sm:text-[20px] md:text-[52px] lg:text-[56px] font-extrabold leading-[1.1] tracking-tight uppercase text-ink">
               Plan Trips.
               <br />
               Survive the Group Chat.
@@ -62,7 +62,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="flex-1 flex items-center justify-center relative min-h-[240px] sm:min-h-[300px] md:min-h-[360px] lg:min-h-[440px]"
+            className="flex-1 flex items-center justify-center relative min-h-[210px] sm:min-h-[260px] md:min-h-[310px] lg:min-h-[380px]"
             variants={fadeUp}
           >
             <div className="w-full h-full border-[3px] border-ink rounded-[18px] bg-[#F7F4EF] overflow-hidden relative">
