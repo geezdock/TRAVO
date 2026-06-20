@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "How it Works", href: "#how-it-works" },
-  { label: "Safety", href: "#safety" },
+  { label: "How it Works", href: "/how-it-works" },
+  { label: "Safety", href: "/safety" },
 ];
 
 export function LandingHeader() {
