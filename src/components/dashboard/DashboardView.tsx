@@ -28,7 +28,7 @@ export function DashboardView() {
         <div className="max-w-6xl mx-auto px-4 py-0 flex items-center justify-between h-16">
           <div className="w-28">
             <span className="font-display text-xl font-bold text-ink">
-              TRAVO
+              VOYAQ
             </span>
           </div>
 

@@ -60,8 +60,8 @@ export function ConsentSent({ contact }: ConsentSentProps) {
           const url = `${window.location.origin}/consent?ref=${contact.value}`;
           const text =
             contact.type === "phone"
-              ? `Please approve my trip on TRAVO: ${url}`
-              : `Please approve my trip on TRAVO: ${url}`;
+              ? `Please approve my trip on VOYAQ: ${url}`
+              : `Please approve my trip on VOYAQ: ${url}`;
           window.open(
             `https://wa.me/?text=${encodeURIComponent(text)}`,
             "_blank"

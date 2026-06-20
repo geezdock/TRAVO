@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TRAVO — Plan trips. Together.",
+  title: "VOYAQ — Plan trips. Together.",
   description:
     "Collaborative group travel planner for Indian students. Budget, vote, and build itineraries as a squad.",
   icons: {

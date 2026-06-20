@@ -23,7 +23,7 @@ export function LandingHeader() {
           </svg>
         </div>
         <h2 className="font-display text-base sm:text-xl font-extrabold tracking-tight text-ink">
-          TRAVO
+          VOYAQ
         </h2>
       </div>
 

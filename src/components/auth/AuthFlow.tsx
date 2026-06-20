@@ -84,7 +84,7 @@ export function AuthFlow() {
               </button>
             )}
             <span className="font-display text-xl font-bold text-ink">
-              TRAVO
+              VOYAQ
             </span>
           </div>
           <span className="font-mono text-xs text-ink-muted uppercase tracking-wider">
