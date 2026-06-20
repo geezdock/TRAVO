@@ -1,6 +1,7 @@
 "use client";
 
 import { MotionValue, motion, useTransform } from "framer-motion";
+import { useStageOpacity } from "./stageUtils";
 import { useMemo } from "react";
 
 interface DateSlot {
@@ -8,6 +9,11 @@ interface DateSlot {
   day: string;
   available: number;
   friends: { initial: string; color: string }[];
+}
+
+function seededRandom(seed: number) {
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
 }
 
 function generateDateSlots(): DateSlot[] {
@@ -27,7 +33,7 @@ function generateDateSlots(): DateSlot[] {
   const baseDate = 12;
 
   return avails.map((count, i) => {
-    const shuffled = [...friendColors].sort(() => Math.random() - 0.5);
+    const shuffled = [...friendColors].sort(() => seededRandom(i * 19) - 0.5);
     return {
       date: baseDate + i,
       day: days[i],
@@ -37,55 +43,72 @@ function generateDateSlots(): DateSlot[] {
   });
 }
 
+function DateFriendAvatar({
+  friend,
+  friendIndex,
+  appearDelay,
+  localProgress,
+}: {
+  friend: { initial: string; color: string };
+  friendIndex: number;
+  appearDelay: number;
+  localProgress: MotionValue<number>;
+}) {
+  const avStart = appearDelay + 0.05 + friendIndex * 0.03;
+  const scale = useTransform(localProgress, [avStart, avStart + 0.02], [0, 1]);
+  const opacity = useTransform(localProgress, [avStart, avStart + 0.02], [0, 1]);
+
+  return (
+    <motion.div
+      style={{ scale, opacity }}
+      className={`w-5 h-5 rounded-full ${friend.color} flex items-center justify-center ring-[1.5px] ring-white -ml-1 first:ml-0`}
+    >
+      <span className="text-[7px] font-heading font-bold text-white leading-none">
+        {friend.initial}
+      </span>
+    </motion.div>
+  );
+}
+
 function DateCell({
   slot,
   index,
-  localProgress,
+  localProgress: lp,
 }: {
   slot: DateSlot;
   index: number;
   localProgress: MotionValue<number>;
 }) {
   const appearDelay = 0.10 + index * 0.07;
-  const opacity = useTransform(localProgress, [appearDelay, appearDelay + 0.04], [0, 1]);
-  const y = useTransform(localProgress, [appearDelay, appearDelay + 0.04], [20, 0]);
+  const opacity = useTransform(lp, [appearDelay, appearDelay + 0.04], [0, 1]);
+  const y = useTransform(lp, [appearDelay, appearDelay + 0.04], [20, 0]);
 
   const selectedRange = [2, 3, 4];
 
   return (
     <motion.div
       style={{ opacity, y }}
-      className={`rounded-[12px] border-[2px] p-3 text-center ${
+      className={`rounded-[12px] border-[2px] p-1.5 sm:p-3 text-center ${
         selectedRange.includes(index)
           ? "border-accent bg-accent/5"
           : "border-ink/10 bg-white"
       }`}
     >
-      <span className="font-mono text-[10px] font-bold text-ink-muted uppercase">
+      <span className="font-mono text-[8px] sm:text-[10px] font-bold text-ink-muted uppercase">
         {slot.day}
       </span>
-      <p className="font-display text-lg font-extrabold text-ink mt-0.5">
+      <p className="font-display text-sm sm:text-lg font-extrabold text-ink mt-0.5">
         Aug {slot.date}
       </p>
-      <div className="flex items-center justify-center gap-0.5 mt-2 flex-wrap">
+      <div className="flex items-center justify-center gap-0.5 mt-1 sm:mt-2 flex-wrap">
         {slot.friends.slice(0, 4).map((f, i) => (
-          <motion.div
+          <DateFriendAvatar
             key={f.initial + i}
-            initial={{ scale: 0, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              delay: appearDelay + 0.05 + i * 0.03,
-              type: "spring",
-              stiffness: 400,
-              damping: 16,
-            }}
-            className={`w-5 h-5 rounded-full ${f.color} flex items-center justify-center ring-[1.5px] ring-white -ml-1 first:ml-0`}
-          >
-            <span className="text-[7px] font-heading font-bold text-white leading-none">
-              {f.initial}
-            </span>
-          </motion.div>
+            friend={f}
+            friendIndex={i}
+            appearDelay={appearDelay}
+            localProgress={lp}
+          />
         ))}
       </div>
       <span className="font-mono text-[10px] font-bold text-ink-muted mt-1.5 block">
@@ -105,11 +128,7 @@ export function StageDates({
 
   const slots = useMemo(() => generateDateSlots(), []);
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -134,14 +153,14 @@ export function StageDates({
           style={{ opacity: headlineOpacity, y: headlineY }}
           className="text-center mb-8"
         >
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
             Find dates that actually work.
           </h2>
         </motion.div>
 
         <motion.div
           style={{ opacity: cardOpacity, y: cardY }}
-          className="border-[3px] border-ink rounded-[16px] bg-white p-6 sm:p-8 shadow-bruted-lg"
+          className="border-[3px] border-ink rounded-[16px] bg-white p-3 sm:p-8 shadow-bruted-lg"
         >
           <div className="flex items-center justify-between mb-6">
             <span className="font-mono text-xs font-bold text-ink-muted uppercase tracking-wider">
@@ -158,7 +177,7 @@ export function StageDates({
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-1 sm:gap-2">
             {slots.map((slot, i) => (
               <DateCell
                 key={slot.date}

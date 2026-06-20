@@ -2,6 +2,7 @@
 
 import { MotionValue, motion, useTransform } from "framer-motion";
 import { Umbrella, Wallet, Music, Sun, MapPin } from "lucide-react";
+import { useStageOpacity } from "./stageUtils";
 
 const tags = [
   { label: "Beach", icon: Umbrella },
@@ -44,11 +45,7 @@ export function StageAI({
   const start = 0.65;
   const end = 0.78;
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -63,6 +60,7 @@ export function StageAI({
 
   const tagsContainerOpacity = useTransform(localProgress, [0.40, 0.48], [0, 1]);
 
+  const progressFillPct = useTransform(progressFill, (v) => `${v}%`);
   const progressTextValue = useTransform(progressText, (v) => `${Math.round(v)}%`);
 
   const summaryOpacity = useTransform(localProgress, [0.60, 0.68], [0, 1]);
@@ -81,14 +79,14 @@ export function StageAI({
           style={{ opacity: headlineOpacity, y: headlineY }}
           className="text-center mb-8"
         >
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
             Let AI handle the planning.
           </h2>
         </motion.div>
 
         <motion.div
           style={{ opacity: cardOpacity, y: cardY }}
-          className="border-[3px] border-ink rounded-[16px] bg-white p-6 sm:p-8 shadow-bruted-lg"
+          className="border-[3px] border-ink rounded-[16px] bg-white p-4 sm:p-8 shadow-bruted-lg"
         >
           <div className="flex items-center gap-3 mb-6">
             <motion.div
@@ -104,7 +102,7 @@ export function StageAI({
               <p className="font-heading text-sm font-bold text-ink">Generating itinerary</p>
               <div className="w-full h-2 rounded-[3px] bg-ink/10 overflow-hidden mt-1.5">
                 <motion.div
-                  style={{ width: progressFill }}
+                  style={{ width: progressFillPct }}
                   className="h-full rounded-[3px] bg-gradient-to-r from-accent to-accent-dark"
                 />
               </div>

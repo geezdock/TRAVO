@@ -2,6 +2,7 @@
 
 import { MotionValue, motion, useTransform } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useStageOpacity } from "./stageUtils";
 
 export function StageCTA({
   scrollYProgress,
@@ -13,11 +14,7 @@ export function StageCTA({
   const start = 0.90;
   const end = 1.0;
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 1],
-    [0, 1, 1, 1]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -37,7 +34,7 @@ export function StageCTA({
       <div className="w-full max-w-lg mx-auto px-4 text-center">
         <motion.h2
           style={{ opacity: headlineOpacity, y: headlineY }}
-          className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-surface uppercase tracking-tight leading-[1.1]"
+          className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-surface uppercase tracking-tight leading-[1.1]"
         >
           Stop planning trips
           <br />

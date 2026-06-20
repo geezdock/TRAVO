@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { dobSchema, calculateAge } from "@/lib/schemas";
 
@@ -12,6 +12,11 @@ interface AgeGateModalProps {
 export function AgeGateModal({ onAdult, onMinor }: AgeGateModalProps) {
   const [dob, setDob] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [maxDate, setMaxDate] = useState("");
+
+  useEffect(() => {
+    setMaxDate(new Date().toISOString().split("T")[0]);
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -59,7 +64,7 @@ export function AgeGateModal({ onAdult, onMinor }: AgeGateModalProps) {
               setError(null);
             }}
             className="brut-input w-full font-mono text-base"
-            max={new Date().toISOString().split("T")[0]}
+            max={maxDate}
             autoFocus
           />
           {error && (

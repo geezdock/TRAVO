@@ -2,6 +2,7 @@
 
 import { MotionValue, motion, useTransform } from "framer-motion";
 import { useMemo } from "react";
+import { useStageOpacity } from "./stageUtils";
 
 interface ConfettiParticle {
   x: number;
@@ -13,16 +14,21 @@ interface ConfettiParticle {
   duration: number;
 }
 
+function seededRandom(seed: number) {
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+}
+
 function generateConfetti(): ConfettiParticle[] {
   const colors = ["bg-accent", "bg-accent-light", "bg-peach", "bg-clay", "bg-success", "bg-warning"];
   return Array.from({ length: 60 }, (_, i) => ({
-    x: Math.random() * 100,
-    y: -10 - Math.random() * 20,
-    rotation: Math.random() * 360,
+    x: Math.round(seededRandom(i * 7) * 100 * 100) / 100,
+    y: -10 - Math.round(seededRandom(i * 13) * 20 * 100) / 100,
+    rotation: Math.round(seededRandom(i * 3) * 360 * 100) / 100,
     color: colors[i % colors.length],
-    size: 6 + Math.random() * 8,
-    delay: Math.random() * 0.5,
-    duration: 2 + Math.random() * 2,
+    size: Math.round((6 + seededRandom(i * 11) * 8) * 100) / 100,
+    delay: Math.round(seededRandom(i * 5) * 0.5 * 100) / 100,
+    duration: Math.round((2 + seededRandom(i * 17) * 2) * 100) / 100,
   }));
 }
 
@@ -63,11 +69,7 @@ export function StageCelebration({
 
   const confetti = useMemo(() => generateConfetti(), []);
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -104,13 +106,14 @@ export function StageCelebration({
           animate={{
             y: ["-10vh", "110vh"],
             rotate: [particle.rotation, particle.rotation + 360],
-            opacity: [1, 1, 0],
+            opacity: [1, 0],
           }}
           transition={{
             duration: particle.duration,
             delay: particle.delay,
             repeat: Infinity,
             ease: "linear",
+            times: [0, 1],
           }}
         />
       ))}
@@ -118,7 +121,7 @@ export function StageCelebration({
       <div className="w-full max-w-lg mx-auto px-4 text-center">
         <motion.div
           style={{ opacity: cardOpacity, scale: cardScale }}
-          className="border-[3px] border-ink rounded-[20px] bg-white p-8 shadow-bruted-lg relative"
+          className="border-[3px] border-ink rounded-[20px] bg-white p-4 sm:p-8 shadow-bruted-lg relative"
         >
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-4 py-1 rounded-full border-[2px] border-ink">
             Boarding Pass
@@ -130,20 +133,20 @@ export function StageCelebration({
             </p>
           </div>
 
-          <div className="py-6 flex justify-center gap-8">
+          <div className="py-4 sm:py-6 flex justify-center gap-4 sm:gap-8">
             <div className="text-center">
               <p className="font-mono text-[10px] font-bold text-ink-muted uppercase tracking-wider">Friends</p>
-              <p className="font-display text-2xl font-extrabold text-ink mt-1">8</p>
+              <p className="font-display text-xl sm:text-2xl font-extrabold text-ink mt-1">8</p>
             </div>
             <div className="w-[2px] bg-ink/10" />
             <div className="text-center">
               <p className="font-mono text-[10px] font-bold text-ink-muted uppercase tracking-wider">Days</p>
-              <p className="font-display text-2xl font-extrabold text-ink mt-1">3</p>
+              <p className="font-display text-xl sm:text-2xl font-extrabold text-ink mt-1">3</p>
             </div>
             <div className="w-[2px] bg-ink/10" />
             <div className="text-center">
               <p className="font-mono text-[10px] font-bold text-ink-muted uppercase tracking-wider">Budget</p>
-              <p className="font-display text-2xl font-extrabold text-ink mt-1">₹4,850</p>
+              <p className="font-display text-xl sm:text-2xl font-extrabold text-ink mt-1">₹4,850</p>
             </div>
           </div>
 
@@ -161,11 +164,9 @@ export function StageCelebration({
 
         <motion.h2
           style={{ opacity: headlineOpacity, scale: headlineScale }}
-          className="font-display text-4xl sm:text-5xl lg:text-7xl font-extrabold text-ink uppercase tracking-tight mt-8 leading-[1.1]"
+          className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-ink uppercase tracking-tight mt-8 leading-[1.1]"
         >
-          GOA IS
-          <br />
-          HAPPENING.
+          GOA IS HAPPENING.
         </motion.h2>
 
         <motion.p

@@ -2,6 +2,7 @@
 
 import { MotionValue, motion, useTransform } from "framer-motion";
 import { chaosMessages } from "./chatData";
+import { useStageOpacity } from "./stageUtils";
 
 function MessageItem({
   msg,
@@ -53,11 +54,7 @@ export function StageChaos({
   const start = 0;
   const end = 0.20;
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -75,11 +72,11 @@ export function StageChaos({
       style={{ opacity: stageOpacity }}
       className="absolute inset-0 flex items-center justify-center"
     >
-      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center gap-6 lg:gap-16">
         <div className="flex-1 max-w-lg">
           <motion.h2
             style={{ opacity: headlineOpacity, y: headlineY }}
-            className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight leading-[1.1]"
+            className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight leading-[1.1]"
           >
             Every trip starts
             <br />

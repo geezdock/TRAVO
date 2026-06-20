@@ -1,6 +1,7 @@
 "use client";
 
 import { MotionValue, motion, useTransform } from "framer-motion";
+import { useStageOpacity } from "./stageUtils";
 
 const budgetGroups = [
   { label: "₹3,500", friends: 2, pct: 25 },
@@ -27,11 +28,7 @@ export function StageBudget({
   const start = 0.37;
   const end = 0.52;
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -60,7 +57,7 @@ export function StageBudget({
           style={{ opacity: headlineOpacity, y: headlineY }}
           className="text-center mb-8"
         >
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
             Agree before anyone books.
           </h2>
         </motion.div>
@@ -68,9 +65,9 @@ export function StageBudget({
         <div className="space-y-4">
           <motion.div
             style={{ opacity: conflictCardOpacity, y: conflictCardY }}
-            className="border-[3px] border-ink rounded-[16px] bg-white p-6 sm:p-8 shadow-bruted-lg"
+            className="border-[3px] border-ink rounded-[16px] bg-white p-4 sm:p-8 shadow-bruted-lg"
           >
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-4 sm:mb-5">
               <span className="font-mono text-xs font-bold text-ink-muted uppercase tracking-wider">
                 Budget Preferences
               </span>
@@ -116,7 +113,7 @@ export function StageBudget({
 
           <motion.div
             style={{ opacity: aiCardOpacity, y: aiCardY }}
-            className="border-[3px] border-ink rounded-[16px] bg-white p-6 sm:p-8 shadow-bruted-lg"
+            className="border-[3px] border-ink rounded-[16px] bg-white p-4 sm:p-8 shadow-bruted-lg"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-[8px] bg-accent border-[2px] border-ink flex items-center justify-center">

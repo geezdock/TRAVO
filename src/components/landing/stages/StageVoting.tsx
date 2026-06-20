@@ -1,6 +1,7 @@
 "use client";
 
 import { MotionValue, motion, useTransform } from "framer-motion";
+import { useStageOpacity } from "./stageUtils";
 
 const destinations = [
   { name: "Goa", votes: 5, pct: 62 },
@@ -18,6 +19,33 @@ const friendVotes = [
   { name: "Priya", initial: "P", color: "bg-peach-dark", vote: "Gokarna" },
   { name: "Arjun", initial: "A", color: "bg-accent", vote: "Pondicherry" },
 ];
+
+function FriendAvatar({
+  friend,
+  barIndex,
+  avatarIndex,
+  localProgress,
+}: {
+  friend: { name: string; initial: string; color: string; vote: string };
+  barIndex: number;
+  avatarIndex: number;
+  localProgress: MotionValue<number>;
+}) {
+  const avStart = 0.5 + barIndex * 0.15 + avatarIndex * 0.03;
+  const scale = useTransform(localProgress, [avStart, avStart + 0.03], [0, 1]);
+  const opacity = useTransform(localProgress, [avStart, avStart + 0.03], [0, 1]);
+
+  return (
+    <motion.div
+      style={{ scale, opacity }}
+      className={`w-6 h-6 rounded-full ${friend.color} flex items-center justify-center ring-2 ring-white -ml-1 first:ml-0`}
+    >
+      <span className="text-[8px] font-heading font-bold text-white leading-none">
+        {friend.initial}
+      </span>
+    </motion.div>
+  );
+}
 
 function VoteBar({
   name,
@@ -38,6 +66,7 @@ function VoteBar({
   const countOpacity = useTransform(localProgress, [barDelay + 0.02, barDelay + 0.07], [0, 1]);
 
   const relevantFriends = friendVotes.filter((f) => f.vote === name);
+  const barWidthPct = useTransform(barWidth, (v) => `${v}%`);
 
   return (
     <motion.div
@@ -45,31 +74,26 @@ function VoteBar({
       className="space-y-1.5"
     >
       <div className="flex items-center gap-3">
-        <span className="font-heading text-base sm:text-lg font-bold text-ink w-28 shrink-0">
+        <span className="font-heading text-sm sm:text-lg font-bold text-ink w-20 sm:w-28 shrink-0">
           {name}
         </span>
         <div className="flex-1 relative h-8">
           <div className="absolute inset-0 bg-clay-light/30 rounded-[6px] overflow-hidden">
             <motion.div
-              style={{ width: barWidth }}
+              style={{ width: barWidthPct }}
               className="h-full rounded-[6px] bg-gradient-to-r from-accent to-accent-dark"
             />
           </div>
           <div className="absolute inset-0 flex items-center px-3">
             <div className="flex items-center gap-1">
               {relevantFriends.slice(0, 5).map((f, i) => (
-                <motion.div
+                <FriendAvatar
                   key={f.name}
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + index * 0.15 + i * 0.05, type: "spring", stiffness: 400, damping: 16 }}
-                  className={`w-6 h-6 rounded-full ${f.color} flex items-center justify-center ring-2 ring-white -ml-1 first:ml-0`}
-                >
-                  <span className="text-[8px] font-heading font-bold text-white leading-none">
-                    {f.initial}
-                  </span>
-                </motion.div>
+                  friend={f}
+                  barIndex={index}
+                  avatarIndex={i}
+                  localProgress={localProgress}
+                />
               ))}
               {relevantFriends.length > 5 && (
                 <span className="font-mono text-[10px] text-white font-bold ml-1">
@@ -98,11 +122,7 @@ export function StageVoting({
   const start = 0.20;
   const end = 0.37;
 
-  const stageOpacity = useTransform(
-    scrollYProgress,
-    [start - 0.02, start, end, end + 0.02],
-    [0, 1, 1, 0]
-  );
+  const stageOpacity = useStageOpacity(scrollYProgress, start, end);
 
   const localProgress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
@@ -127,7 +147,7 @@ export function StageVoting({
           style={{ opacity: headlineOpacity, y: headlineY }}
           className="text-center mb-8"
         >
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
+          <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold text-ink uppercase tracking-tight">
             Let everyone have a say.
           </h2>
         </motion.div>
