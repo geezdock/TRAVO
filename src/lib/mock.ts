@@ -1,3 +1,50 @@
 import type { Squad } from "@/types/squad";
 
-export const mockSquads: Squad[] = [];
+export const mockSquads: Squad[] = [
+  {
+    id: "squad-demo-1",
+    name: "Goa Crew 2026",
+    inviteCode: "goa-trip-8f3a",
+    createdBy: "me",
+    destination: "Goa",
+    destinations: ["Goa", "Gokarna", "Pondicherry"],
+    members: [
+      { id: "me", name: "You", initial: "Y", color: "bg-accent", verified: true, joinedAt: "2026-06-15T10:00:00Z" },
+      { id: "r1", name: "Rahul", initial: "R", color: "bg-[#D4836A]", verified: true, joinedAt: "2026-06-15T10:05:00Z" },
+      { id: "a1", name: "Ananya", initial: "A", color: "bg-[#E8C4B8]", verified: true, joinedAt: "2026-06-15T10:10:00Z" },
+      { id: "s1", name: "Siddharth", initial: "S", color: "bg-[#C4A99A]", verified: true, joinedAt: "2026-06-15T10:15:00Z" },
+      { id: "v1", name: "Vivek", initial: "V", color: "bg-[#E09D88]", verified: false, joinedAt: "2026-06-15T11:00:00Z" },
+      { id: "m1", name: "Mrunal", initial: "M", color: "bg-[#F0D5C9]", verified: false, joinedAt: "2026-06-15T11:30:00Z" },
+      { id: "k1", name: "Karthik", initial: "K", color: "bg-[#D4BFB2]", verified: false, joinedAt: "2026-06-16T09:00:00Z" },
+      { id: "p1", name: "Priya", initial: "P", color: "bg-[#E8C4B8]", verified: false, joinedAt: "2026-06-16T09:30:00Z" },
+    ],
+    memberLimit: 8,
+    votes: [
+      { memberId: "me", destination: "Goa" },
+      { memberId: "r1", destination: "Goa" },
+      { memberId: "a1", destination: "Goa" },
+      { memberId: "s1", destination: "Goa" },
+      { memberId: "v1", destination: "Gokarna" },
+      { memberId: "m1", destination: "Pondicherry" },
+      { memberId: "k1", destination: "Gokarna" },
+    ],
+    budgetPerPerson: 5000,
+    budgetPreferences: [
+      { memberId: "me", amount: 5000 },
+      { memberId: "r1", amount: 5000 },
+      { memberId: "a1", amount: 6500 },
+      { memberId: "s1", amount: 5000 },
+      { memberId: "v1", amount: 3500 },
+      { memberId: "m1", amount: 5000 },
+      { memberId: "k1", amount: 6500 },
+    ],
+    dateProposals: [
+      { id: "dp-1", startDate: "2026-08-15", endDate: "2026-08-17", proposedBy: "me", votes: ["me", "r1", "a1", "s1"], createdAt: "2026-06-15T12:00:00Z" },
+      { id: "dp-2", startDate: "2026-08-22", endDate: "2026-08-24", proposedBy: "r1", votes: ["r1", "v1", "m1"], createdAt: "2026-06-15T13:00:00Z" },
+    ],
+    lockedDates: { start: "2026-08-15", end: "2026-08-17" },
+    polls: [],
+    status: "voting",
+    createdAt: "2026-06-15T10:00:00Z",
+  },
+];

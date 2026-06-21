@@ -1,0 +1,165 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { AlertTriangle, Sparkles, Check } from "lucide-react";
+import type { Squad } from "@/types/squad";
+
+interface TabBudgetProps {
+  squad: Squad;
+  onUpdate: (squad: Squad) => void;
+}
+
+export function TabBudget({ squad, onUpdate }: TabBudgetProps) {
+  const [myBudget, setMyBudget] = useState(
+    squad.budgetPreferences.find((p) => p.memberId === "me")?.amount || 5000
+  );
+
+  const totalPrefs = squad.budgetPreferences.length;
+  const amounts = [...new Set(squad.budgetPreferences.map((p) => p.amount))].sort(
+    (a, b) => a - b
+  );
+
+  const groups = amounts.map((amount) => {
+    const count = squad.budgetPreferences.filter((p) => p.amount === amount).length;
+    return { amount, count, pct: totalPrefs > 0 ? Math.round((count / totalPrefs) * 100) : 0 };
+  });
+
+  const hasConflict = amounts.length > 1;
+  const avgBudget =
+    totalPrefs > 0
+      ? Math.round(
+          squad.budgetPreferences.reduce((sum, p) => sum + p.amount, 0) / totalPrefs
+        )
+      : 5000;
+
+  function handleSetBudget() {
+    const existing = squad.budgetPreferences.findIndex(
+      (p) => p.memberId === "me"
+    );
+    const newPrefs = [...squad.budgetPreferences];
+    if (existing >= 0) {
+      newPrefs[existing] = { memberId: "me", amount: myBudget };
+    } else {
+      newPrefs.push({ memberId: "me", amount: myBudget });
+    }
+    onUpdate({ ...squad, budgetPreferences: newPrefs });
+  }
+
+  function handleLockBudget() {
+    onUpdate({ ...squad, budgetPerPerson: avgBudget });
+  }
+
+  const formatRupee = (n: number) =>
+    `₹${n.toLocaleString("en-IN")}`;
+
+  return (
+    <div className="max-w-lg space-y-4">
+      <div className="border-[3px] border-ink rounded-[16px] bg-white p-5 sm:p-6 shadow-bruted-lg">
+        <div className="flex items-center justify-between mb-5">
+          <span className="font-mono text-xs font-bold text-ink-muted uppercase tracking-wider">
+            Your Budget
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-stretch flex-1">
+            <span className="brut-input inline-flex items-center px-3 border-r-0 rounded-r-none bg-clay-light text-ink font-mono shrink-0 text-sm">
+              ₹
+            </span>
+            <input
+              type="number"
+              inputMode="numeric"
+              value={myBudget}
+              onChange={(e) => setMyBudget(parseInt(e.target.value) || 0)}
+              className="brut-input w-full rounded-l-none font-mono text-lg"
+            />
+          </div>
+          <button onClick={handleSetBudget} className="brut-btn px-4 text-sm min-h-[44px]">
+            Set
+          </button>
+        </div>
+      </div>
+
+      {totalPrefs > 0 && (
+        <div className="border-[3px] border-ink rounded-[16px] bg-white p-5 sm:p-6 shadow-bruted-lg">
+          <div className="flex items-center justify-between mb-4">
+            <span className="font-mono text-xs font-bold text-ink-muted uppercase tracking-wider">
+              Budget Preferences
+            </span>
+            {hasConflict && (
+              <div className="flex items-center gap-1.5 bg-error/10 border border-error/30 rounded-full px-3 py-1">
+                <AlertTriangle className="w-4 h-4 text-error" />
+                <span className="font-heading text-xs font-bold text-error">
+                  Conflict
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            {groups.map((group) => (
+              <div key={group.amount} className="flex items-center gap-3">
+                <span className="font-mono text-sm font-bold text-ink w-20">
+                  {formatRupee(group.amount)}
+                </span>
+                <div className="flex-1 h-3 rounded-[4px] bg-ink/10 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${group.pct}%` }}
+                    transition={{ duration: 0.6 }}
+                    className="h-full rounded-[4px] bg-gradient-to-r from-accent to-accent-dark"
+                  />
+                </div>
+                <span className="font-mono text-xs text-ink-muted w-12 text-right">
+                  {group.count} {group.count === 1 ? "friend" : "friends"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {totalPrefs > 0 && (
+        <div className="border-[3px] border-ink rounded-[16px] bg-white p-5 sm:p-6 shadow-bruted-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-[8px] bg-accent border-[2px] border-ink flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="font-heading text-sm font-bold text-ink">
+                Recommended Budget
+              </p>
+              <p className="font-mono text-[10px] text-ink-muted">
+                Based on group preferences
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="font-display text-4xl font-extrabold text-ink">
+              {formatRupee(avgBudget)}
+            </span>
+            <span className="font-heading text-sm text-ink-muted">/person</span>
+          </div>
+
+          {squad.budgetPerPerson === avgBudget ? (
+            <div className="flex items-center gap-2 bg-success/10 border border-success/30 rounded-[8px] px-4 py-2.5">
+              <Check className="w-5 h-5 text-success" />
+              <span className="font-heading text-sm font-bold text-success">
+                Budget Locked
+              </span>
+            </div>
+          ) : (
+            <button
+              onClick={handleLockBudget}
+              className="brut-btn w-full text-sm min-h-[44px]"
+            >
+              Lock Budget at {formatRupee(avgBudget)}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

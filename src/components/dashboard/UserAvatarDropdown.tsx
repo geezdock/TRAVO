@@ -53,7 +53,7 @@ export function UserAvatarDropdown() {
     <div ref={ref} className="relative flex items-center gap-2">
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="w-10 h-10 rounded-bruted border-2 border-ink bg-peach flex items-center justify-center font-display font-bold text-ink text-lg hover:shadow-bruted-sm transition-shadow"
+        className="w-11 h-11 rounded-bruted border-2 border-ink bg-peach flex items-center justify-center font-display font-bold text-ink text-lg hover:shadow-bruted-sm transition-shadow"
         aria-label="User menu"
       >
         {initial}
@@ -80,7 +80,7 @@ export function UserAvatarDropdown() {
                   setOpen(false);
                   item.action();
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-bruted font-heading text-sm text-ink hover:bg-surface-alt transition-colors text-left"
+                className="w-full flex items-center gap-3 px-3 py-3 min-h-[44px] rounded-bruted font-heading text-sm text-ink hover:bg-surface-alt transition-colors text-left"
               >
                 <item.icon className="w-4 h-4 text-ink-muted shrink-0" />
                 {item.label}

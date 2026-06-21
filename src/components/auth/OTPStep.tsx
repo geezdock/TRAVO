@@ -82,7 +82,7 @@ export function OTPStep({ label, sublabel, onNext }: OTPStepProps) {
         <p className="font-mono text-lg text-ink">{label}</p>
       </div>
 
-      <div className="flex justify-center gap-2" onPaste={handlePaste}>
+      <div className="flex justify-center gap-1.5 max-sm:gap-1" onPaste={handlePaste}>
         {otp.map((digit, i) => (
           <input
             key={i}
@@ -95,7 +95,7 @@ export function OTPStep({ label, sublabel, onNext }: OTPStepProps) {
             value={digit}
             onChange={(e) => handleChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
-            className="brut-input w-12 h-14 text-center font-mono text-xl tracking-widest"
+            className="brut-input w-11 h-13 max-sm:w-10 max-sm:h-12 text-center font-mono text-xl tracking-widest"
             autoComplete="one-time-code"
           />
         ))}
@@ -118,7 +118,7 @@ export function OTPStep({ label, sublabel, onNext }: OTPStepProps) {
               setOtp(Array(DIGITS).fill(""));
               inputsRef.current[0]?.focus();
             }}
-            className="font-heading text-sm text-accent underline underline-offset-2 hover:text-accent-dark transition-colors"
+            className="font-heading text-sm text-accent underline underline-offset-2 hover:text-accent-dark transition-colors min-h-[44px] py-2.5 inline-flex items-center"
           >
             Resend OTP
           </button>

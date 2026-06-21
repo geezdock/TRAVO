@@ -1,26 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { EmptyState } from "./EmptyState";
 import { SquadGrid } from "./SquadGrid";
 import { CreateSquadModal } from "./CreateSquadModal";
 import { UserAvatarDropdown } from "./UserAvatarDropdown";
+import { WorkspaceView } from "@/components/workspace/WorkspaceView";
 import { mockSquads } from "@/lib/mock";
 import type { Squad } from "@/types/squad";
 
-const navLinks = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Friends", href: "/friends" },
-  { label: "Trips", href: "/trips" },
-];
-
 export function DashboardView() {
-  const pathname = usePathname();
   const [squads, setSquads] = useState<Squad[]>(mockSquads);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+
+  const selectedSquad = squads.find((s) => s.id === selectedId) || null;
+
+  function handleUpdateSquad(updated: Squad) {
+    setSquads((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  }
 
   return (
     <div className="min-h-screen">
@@ -32,32 +31,6 @@ export function DashboardView() {
             </span>
           </div>
 
-          <nav className="flex items-center h-full gap-1">
-            {navLinks.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative flex items-center h-full px-4 font-heading text-sm font-semibold transition-colors ${
-                    active
-                      ? "text-ink"
-                      : "text-ink-muted hover:text-ink"
-                  }`}
-                >
-                  {link.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute bottom-0 left-2 right-2 h-0.5 bg-ink rounded-full"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-
           <div className="w-28 flex justify-end">
             <UserAvatarDropdown />
           </div>
@@ -65,8 +38,21 @@ export function DashboardView() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {squads.length > 0 ? (
+        {selectedSquad ? (
           <motion.div
+            key="workspace"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <WorkspaceView
+              squad={selectedSquad}
+              onBack={() => setSelectedId(null)}
+              onUpdate={handleUpdateSquad}
+            />
+          </motion.div>
+        ) : squads.length > 0 ? (
+          <motion.div
+            key="squad-list"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -76,12 +62,12 @@ export function DashboardView() {
               </h1>
               <button
                 onClick={() => setShowCreate(true)}
-                className="brut-btn text-sm px-5 py-2.5"
+                className="brut-btn text-sm px-5 py-3 min-h-[44px]"
               >
                 + New Squad
               </button>
             </div>
-            <SquadGrid squads={squads} />
+            <SquadGrid squads={squads} onSelect={setSelectedId} />
           </motion.div>
         ) : (
           <EmptyState onCreate={() => setShowCreate(true)} />
@@ -93,6 +79,7 @@ export function DashboardView() {
         onClose={() => setShowCreate(false)}
         onCreated={(squad: Squad) => {
           setSquads((prev) => [squad, ...prev]);
+          setSelectedId(squad.id);
         }}
       />
     </div>

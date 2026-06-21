@@ -95,7 +95,7 @@ export function StepLockDates() {
                   </div>
                 )}
 
-                <span className={`font-mono text-[9px] sm:text-[10px] font-bold uppercase leading-none ${
+                <span className={`font-mono text-[10px] sm:text-[10px] font-bold uppercase leading-none ${
                   isSelected ? "text-accent" : "text-ink-muted"
                 }`}>
                   {slot.day}
@@ -109,7 +109,7 @@ export function StepLockDates() {
 
                 <div className="flex items-center justify-center gap-1 mt-2">
                   <div className={`w-1.5 h-1.5 rounded-full ${getDotColor(slot.available)}`} />
-                  <span className={`font-mono text-[8px] sm:text-[9px] font-bold leading-none ${getAvailColor(slot.available)}`}>
+                  <span className={`font-mono text-[10px] sm:text-[10px] font-bold leading-none ${getAvailColor(slot.available)}`}>
                     {slot.available === 0 ? "none" : `${slot.available}`}
                   </span>
                 </div>
@@ -121,19 +121,19 @@ export function StepLockDates() {
         <div className="mt-4 flex items-center justify-center gap-3 text-ink-muted">
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-success" />
-            <span className="font-mono text-[9px] font-bold">4+</span>
+            <span className="font-mono text-[10px] font-bold">4+</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-ink-light" />
-            <span className="font-mono text-[9px] font-bold">2-4</span>
+            <span className="font-mono text-[10px] font-bold">2-4</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-ink-muted" />
-            <span className="font-mono text-[9px] font-bold">1-2</span>
+            <span className="font-mono text-[10px] font-bold">1-2</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-error" />
-            <span className="font-mono text-[9px] font-bold">0</span>
+            <span className="font-mono text-[10px] font-bold">0</span>
           </div>
         </div>
 

@@ -65,7 +65,7 @@ export function InteractiveDemo() {
               <div key={step.label} className="flex-1 flex items-center gap-0.5 sm:gap-1">
                 <button
                   onClick={() => goTo(i)}
-                  className={`flex items-center justify-center w-full py-2 px-1 rounded-[6px] border-[2px] transition-all ${
+                  className={`flex items-center justify-center w-full py-2.5 min-h-[44px] px-1 rounded-[6px] border-[2px] transition-all ${
                     i <= current
                       ? "border-accent bg-accent/10 text-accent"
                       : "border-ink/10 bg-white text-ink-muted hover:border-ink/30"
@@ -115,7 +115,7 @@ export function InteractiveDemo() {
             <button
               onClick={() => goTo(current - 1)}
               disabled={current === 0}
-              className="flex items-center gap-1.5 font-heading text-sm font-bold text-ink-muted hover:text-ink transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 font-heading text-sm font-bold text-ink-muted hover:text-ink transition-colors disabled:opacity-30 disabled:cursor-not-allowed min-h-[44px] py-2"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -123,7 +123,7 @@ export function InteractiveDemo() {
 
             <button
               onClick={() => goTo(current + 1)}
-              className={`flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide px-5 py-2.5 rounded-bruted border-[2px] border-ink shadow-bruted-sm hover:shadow-bruted hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all ${
+              className={`flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide px-5 py-3 min-h-[44px] rounded-bruted border-[2px] border-ink shadow-bruted-sm hover:shadow-bruted hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all ${
                 isLast
                   ? "bg-accent text-white"
                   : "bg-white text-ink"

@@ -118,7 +118,7 @@ function AIProgressCard({ active }: { active: boolean }) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={active ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
             transition={{ delay: 0.4 + i * 0.08, duration: 0.3 }}
-            className="font-mono text-[8px] font-bold text-ink border border-ink/20 rounded-full px-1.5 py-0.5 bg-[#F7F4EF]"
+            className="font-mono text-[10px] font-bold text-ink border border-ink/20 rounded-full px-1.5 py-0.5 bg-[#F7F4EF]"
           >
             {tag}
           </motion.span>
@@ -137,7 +137,7 @@ function TripReadyCard({ active }: { active: boolean }) {
         transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
         className="border-2 border-ink rounded-lg p-3 bg-white inline-block"
       >
-        <div className="bg-accent text-white font-mono text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-ink mb-1 inline-block">
+        <div className="bg-accent text-white font-mono text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-ink mb-1 inline-block">
           Boarding Pass
         </div>
         <p className="font-display text-sm font-extrabold text-ink uppercase">Goa Weekend Trip</p>
@@ -148,7 +148,7 @@ function TripReadyCard({ active }: { active: boolean }) {
         transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 12 }}
         className="mt-2 inline-block"
       >
-        <span className="bg-success text-white font-mono text-[9px] font-bold uppercase px-2 py-1 rounded border-2 border-ink shadow-bruted-sm">
+        <span className="bg-success text-white font-mono text-[10px] font-bold uppercase px-2 py-1 rounded border-2 border-ink shadow-bruted-sm">
           STAMPED
         </span>
       </motion.div>

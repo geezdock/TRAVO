@@ -40,7 +40,7 @@ export function HeroSection() {
             className="flex-1 flex flex-col justify-center gap-4 lg:gap-6 lg:pr-8"
             variants={fadeUp}
           >
-            <h1 className="font-display text-[24px] max-sm:text-[20px] md:text-[52px] lg:text-[56px] font-extrabold leading-[1.1] tracking-tight uppercase text-ink">
+            <h1 className="font-display text-[24px] max-sm:text-[20px] sm:text-[36px] md:text-[52px] lg:text-[56px] font-extrabold leading-[1.1] tracking-tight uppercase text-ink">
               Plan Trips.
               <br />
               Survive the Group Chat.

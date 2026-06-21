@@ -81,7 +81,7 @@ export function AuthFlow() {
             {backMap[state.step] && (
               <button
                 onClick={backMap[state.step]!}
-                className="p-1 -ml-1 hover:bg-surface-alt rounded-bruted transition-colors"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center -ml-2 hover:bg-surface-alt rounded-bruted transition-colors"
                 aria-label="Go back"
               >
                 <ArrowLeft className="w-5 h-5 text-ink" />

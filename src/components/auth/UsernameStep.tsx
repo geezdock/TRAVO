@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Loader2, AtSign } from "lucide-react";
+import { Check, X, Loader2 } from "lucide-react";
 import { usernameSchema, isUsernameAvailable } from "@/lib/schemas";
 
 interface UsernameStepProps {
