@@ -97,7 +97,15 @@ export function DashboardView() {
             </div>
             <SquadGrid
               squads={squads}
-              onSelect={(id) => router.push(`/workspace/${id}`)}
+              onSelect={(id) => {
+                const s = squads.find((sq) => sq.id === id);
+                const tripStatuses = ["booked", "pending", "cancelled"];
+                if (s && tripStatuses.includes(s.status)) {
+                  router.push(`/trip/${id}`);
+                } else {
+                  router.push(`/workspace/${id}`);
+                }
+              }}
             />
           </motion.div>
         ) : (

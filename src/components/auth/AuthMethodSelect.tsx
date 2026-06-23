@@ -6,9 +6,10 @@ import type { AuthMethod } from "@/types/auth";
 
 interface AuthMethodSelectProps {
   onSelect: (method: AuthMethod) => void;
+  mode: string;
 }
 
-export function AuthMethodSelect({ onSelect }: AuthMethodSelectProps) {
+export function AuthMethodSelect({ onSelect, mode }: AuthMethodSelectProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,10 +20,12 @@ export function AuthMethodSelect({ onSelect }: AuthMethodSelectProps) {
     >
       <div className="text-center space-y-2">
         <p className="font-display text-2xl font-bold text-ink">
-          Get started
+          {mode === "login" ? "Welcome back" : "Get started"}
         </p>
         <p className="font-heading text-sm text-ink-muted">
-          Join your squad and start planning trips.
+          {mode === "login"
+            ? "Sign in to your account."
+            : "Join your squad and start planning trips."}
         </p>
       </div>
 

@@ -46,14 +46,14 @@ export function LandingHeader() {
 
       <div className="hidden md:flex items-center gap-1 sm:gap-3">
         <button
-          onClick={() => router.push("/auth")}
+          onClick={() => router.push("/auth?mode=login")}
           className="font-heading text-[12px] sm:text-sm font-semibold text-ink-muted hover:text-ink transition-colors px-2 sm:px-4 py-1.5 sm:py-2"
         >
           Login
         </button>
 
         <button
-          onClick={() => router.push("/auth")}
+          onClick={() => router.push("/auth?mode=get-started")}
           className="rounded-bruted border-2 border-ink bg-gradient-to-r from-accent to-accent-dark text-surface font-display text-[11px] sm:text-sm font-bold uppercase tracking-wide px-3 sm:px-5 py-1.5 sm:py-2 shadow-bruted-sm hover:shadow-bruted hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
         >
           Get Started
@@ -97,7 +97,7 @@ export function LandingHeader() {
                 <button
                   onClick={() => {
                     setMobileOpen(false);
-                    router.push("/auth");
+                    router.push("/auth?mode=login");
                   }}
                   className="font-heading text-sm font-semibold text-ink-muted hover:text-ink transition-colors py-3"
                 >
@@ -106,7 +106,7 @@ export function LandingHeader() {
                 <button
                   onClick={() => {
                     setMobileOpen(false);
-                    router.push("/auth");
+                    router.push("/auth?mode=get-started");
                   }}
                   className="rounded-bruted border-2 border-ink bg-gradient-to-r from-accent to-accent-dark text-surface font-display text-sm font-bold uppercase tracking-wide px-5 py-3 shadow-bruted-sm"
                 >

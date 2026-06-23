@@ -53,7 +53,7 @@ export function HeroSection() {
 
             <div className="mt-2">
               <button
-                onClick={() => router.push("/auth")}
+                onClick={() => router.push("/auth?mode=get-started")}
                 className="brut-btn text-base font-display font-bold uppercase h-12 px-6 shadow-bruted flex items-center justify-center gap-2 w-fit"
               >
                 Start a Squad

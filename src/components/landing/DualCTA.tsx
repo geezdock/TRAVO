@@ -44,7 +44,7 @@ export function DualCTA() {
         >
           <motion.button
             variants={fadeUp}
-            onClick={() => router.push("/auth")}
+            onClick={() => router.push("/auth?mode=get-started")}
             className="brut-btn text-sm font-display font-bold uppercase h-12 px-8 shadow-bruted flex items-center justify-center gap-2 w-full sm:w-auto bg-accent text-white"
           >
             Start a Squad
