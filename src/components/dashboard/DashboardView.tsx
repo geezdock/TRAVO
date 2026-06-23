@@ -1,24 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Users } from "lucide-react";
 import { EmptyState } from "./EmptyState";
 import { SquadGrid } from "./SquadGrid";
 import { CreateSquadModal } from "./CreateSquadModal";
 import { UserAvatarDropdown } from "./UserAvatarDropdown";
-import { WorkspaceView } from "@/components/workspace/WorkspaceView";
+import { useSquad } from "@/lib/SquadContext";
 import { mockSquads } from "@/lib/mock";
 import type { Squad } from "@/types/squad";
 
 export function DashboardView() {
-  const [squads, setSquads] = useState<Squad[]>(mockSquads);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const joinCode = searchParams.get("join");
+
+  const { squads, updateSquad, addSquad } = useSquad();
   const [showCreate, setShowCreate] = useState(false);
+  const [joinSquad, setJoinSquad] = useState<Squad | null>(null);
 
-  const selectedSquad = squads.find((s) => s.id === selectedId) || null;
+  // Handle join code from URL
+  useEffect(() => {
+    if (!joinCode) return;
 
-  function handleUpdateSquad(updated: Squad) {
-    setSquads((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+    // Search mock squads first
+    const found = mockSquads.find((s) => s.inviteCode === joinCode);
+    if (found) {
+      const alreadyJoined = found.members.some((m) => m.id === "me");
+      if (!alreadyJoined && found.members.length < found.memberLimit) {
+        setJoinSquad(found);
+      } else {
+        // Already joined or full — just open the squad
+        router.push(`/workspace/${found.id}`);
+      }
+    }
+    // Clear the URL param
+    window.history.replaceState({}, "", "/dashboard");
+  }, [joinCode]);
+
+  function handleJoinSquad() {
+    if (!joinSquad) return;
+    const updated: Squad = {
+      ...joinSquad,
+      members: [
+        ...joinSquad.members,
+        {
+          id: "me",
+          name: "You",
+          initial: "Y",
+          color: "bg-accent",
+          verified: true,
+          joinedAt: new Date().toISOString(),
+        },
+      ],
+    };
+    updateSquad(updated);
+    setJoinSquad(null);
+    router.push(`/workspace/${updated.id}`);
   }
 
   return (
@@ -38,19 +78,7 @@ export function DashboardView() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {selectedSquad ? (
-          <motion.div
-            key="workspace"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <WorkspaceView
-              squad={selectedSquad}
-              onBack={() => setSelectedId(null)}
-              onUpdate={handleUpdateSquad}
-            />
-          </motion.div>
-        ) : squads.length > 0 ? (
+        {squads.length > 0 ? (
           <motion.div
             key="squad-list"
             initial={{ opacity: 0, y: 10 }}
@@ -67,7 +95,10 @@ export function DashboardView() {
                 + New Squad
               </button>
             </div>
-            <SquadGrid squads={squads} onSelect={setSelectedId} />
+            <SquadGrid
+              squads={squads}
+              onSelect={(id) => router.push(`/workspace/${id}`)}
+            />
           </motion.div>
         ) : (
           <EmptyState onCreate={() => setShowCreate(true)} />
@@ -78,10 +109,82 @@ export function DashboardView() {
         open={showCreate}
         onClose={() => setShowCreate(false)}
         onCreated={(squad: Squad) => {
-          setSquads((prev) => [squad, ...prev]);
-          setSelectedId(squad.id);
+          addSquad(squad);
+          router.push(`/workspace/${squad.id}`);
         }}
       />
+
+      {/* Join Squad Modal */}
+      <AnimatePresence>
+        {joinSquad && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-ink/40"
+              onClick={() => setJoinSquad(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="brut-card w-full max-w-md relative z-10 text-center space-y-6"
+            >
+              <div className="mx-auto w-14 h-14 rounded-bruted-lg border-2 border-ink flex items-center justify-center bg-peach">
+                <Users className="w-7 h-7 text-ink" />
+              </div>
+
+              <div className="space-y-2">
+                <p className="font-display text-2xl font-bold text-ink">
+                  Join {joinSquad.name}
+                </p>
+                {joinSquad.destination && (
+                  <p className="font-mono text-sm text-ink-muted">
+                    {joinSquad.destination}
+                  </p>
+                )}
+              </div>
+
+              <div className="brut-card !p-4 !shadow-bruted-sm space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-heading text-sm text-ink-muted">Members</span>
+                  <span className="font-mono text-sm font-bold text-ink">
+                    {joinSquad.members.length} / {joinSquad.memberLimit}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {joinSquad.members.slice(0, 8).map((m) => (
+                    <div
+                      key={m.id}
+                      className={`w-7 h-7 rounded-full ${m.color} flex items-center justify-center ring-2 ring-white`}
+                    >
+                      <span className="text-xs font-heading font-bold text-white">
+                        {m.initial}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setJoinSquad(null)}
+                  className="flex-1 brut-btn text-sm !bg-surface-card !text-ink !shadow-bruted-sm hover:!shadow-bruted"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleJoinSquad}
+                  className="flex-1 brut-btn text-sm"
+                >
+                  Join Squad
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

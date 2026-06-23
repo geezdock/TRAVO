@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, Users, X } from "lucide-react";
+import { Copy, Check, Users, UserMinus, Crown } from "lucide-react";
 import type { Squad } from "@/types/squad";
 
 interface TabSquadProps {
@@ -28,28 +28,31 @@ export function TabSquad({ squad, onUpdate }: TabSquadProps) {
   }
 
   return (
-    <div className="max-w-lg space-y-6">
-      <div className="border-[3px] border-ink rounded-[16px] bg-white shadow-bruted-lg overflow-hidden">
-        <div className="bg-ink px-4 py-5 flex items-center gap-3">
-          <Users className="w-5 h-5 text-accent shrink-0" />
+    <div className="max-w-2xl space-y-6">
+      <div className="border border-ink/10 rounded-xl bg-white shadow-lg overflow-hidden">
+        {/* Invite callout */}
+        <div className="mx-5 mt-5 bg-accent/5 border border-accent/20 rounded-xl px-4 py-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+            <Users className="w-4.5 h-4.5 text-accent" />
+          </div>
           <div className="flex-1 min-w-0">
-            <p className="font-display text-sm font-bold text-surface leading-tight">
+            <p className="font-heading text-sm font-bold text-ink leading-tight">
               Squad Invite
             </p>
-            <p className="font-mono text-[11px] text-surface/60 truncate">
+            <p className="font-mono text-[11px] text-ink-muted truncate">
               voyaq.com/join/{squad.inviteCode}
             </p>
           </div>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 border-[2px] border-surface/30 rounded-[8px] px-3 py-2 min-h-[36px] hover:bg-surface/10 transition-colors"
+            className="flex items-center gap-1.5 border-[2px] border-accent/20 rounded-lg px-3 py-2 min-h-[36px] hover:bg-accent/10 transition-colors"
           >
             {copied ? (
               <Check className="w-3.5 h-3.5 text-success" />
             ) : (
-              <Copy className="w-3.5 h-3.5 text-surface" />
+              <Copy className="w-3.5 h-3.5 text-accent" />
             )}
-            <span className="font-mono text-[10px] font-bold text-surface uppercase tracking-wider">
+            <span className="font-mono text-[10px] font-bold text-accent uppercase tracking-wider">
               {copied ? "Copied" : "Copy"}
             </span>
           </button>
@@ -66,39 +69,55 @@ export function TabSquad({ squad, onUpdate }: TabSquadProps) {
           </div>
 
           <div className="space-y-2">
-            {squad.members.map((member, i) => (
-              <motion.div
-                key={member.id}
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.3 }}
-                className="flex items-center gap-3 border-[1.5px] border-ink/10 rounded-[10px] p-2.5"
-              >
-                <div
-                  className={`w-8 h-8 rounded-full ${member.color} flex items-center justify-center ring-2 ring-white shrink-0`}
+            {squad.members.map((member, i) => {
+              const isCreator = member.id === squad.createdBy;
+              return (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
+                  className="flex items-center gap-3 border border-ink/8 rounded-xl p-2.5 hover:bg-surface-alt/50 transition-colors"
                 >
-                  <span className="text-xs font-heading font-bold text-white">
-                    {member.initial}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-heading text-sm font-bold text-ink">
-                    {member.name}
-                  </p>
-                  <p className="font-mono text-[10px] text-ink-muted">
-                    {member.id === "me" ? "You" : "Joined"}
-                  </p>
-                </div>
-                {member.id !== "me" && (
-                  <button
-                    onClick={() => handleRemove(member.id)}
-                    className="min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-error/10 rounded transition-colors"
+                  <div
+                    className={`w-8 h-8 rounded-full ${member.color} flex items-center justify-center ring-2 ring-white shrink-0 relative`}
                   >
-                    <X className="w-4 h-4 text-ink-muted hover:text-error" />
-                  </button>
-                )}
-              </motion.div>
-            ))}
+                    <span className="text-xs font-heading font-bold text-white">
+                      {member.initial}
+                    </span>
+                    {isCreator && (
+                      <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-accent rounded-full flex items-center justify-center border-2 border-white">
+                        <Crown className="w-2.5 h-2.5 text-white" />
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <p className="font-heading text-sm font-bold text-ink">
+                        {member.name}
+                      </p>
+                      {isCreator && (
+                        <span className="font-mono text-[9px] font-bold text-accent bg-accent/10 px-1.5 py-0.5 rounded uppercase">
+                          Organizer
+                        </span>
+                      )}
+                    </div>
+                    <p className="font-mono text-[10px] text-ink-muted">
+                      {member.id === "me" ? "You" : "Joined"}
+                    </p>
+                  </div>
+                  {member.id !== "me" && (
+                    <button
+                      onClick={() => handleRemove(member.id)}
+                      className="min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-error/10 rounded-lg transition-colors"
+                      title="Remove member"
+                    >
+                      <UserMinus className="w-4 h-4 text-ink-muted hover:text-error" />
+                    </button>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
 
           {squad.members.length < squad.memberLimit && (

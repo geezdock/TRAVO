@@ -1,3 +1,4 @@
+import { SplashScreen } from "@/components/landing/SplashScreen";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { MiniStoryMode } from "@/components/landing/MiniStoryMode";
 import { QuickWalkthrough } from "@/components/landing/QuickWalkthrough";
@@ -6,12 +7,12 @@ import { MarqueeTicker } from "@/components/landing/MarqueeTicker";
 
 export default function Home() {
   return (
-    <>
+    <SplashScreen>
       <HeroSection />
       <MiniStoryMode />
       <QuickWalkthrough />
       <DualCTA />
       <MarqueeTicker />
-    </>
+    </SplashScreen>
   );
 }

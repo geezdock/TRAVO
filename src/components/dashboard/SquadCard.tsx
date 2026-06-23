@@ -12,12 +12,22 @@ interface SquadCardProps {
 const statusConfig = {
   planning: { label: "Planning", className: "bg-clay-light text-ink" },
   voting: { label: "Voting", className: "bg-peach text-ink" },
-  booked: { label: "Booked", className: "bg-success text-surface" },
+  ready: { label: "Ready", className: "bg-success text-surface" },
+  pending: { label: "Pending", className: "bg-amber-400 text-ink" },
+  booked: { label: "Booked", className: "bg-ink text-surface" },
+  cancelled: { label: "Cancelled", className: "bg-error/20 text-error" },
 };
 
 export function SquadCard({ squad, onSelect }: SquadCardProps) {
   const status = statusConfig[squad.status];
   const destination = squad.destination || squad.destinations[0] || "Undecided";
+
+  const hasDest = !!squad.lockedDestination;
+  const hasBudget = squad.lockedBudget !== undefined;
+  const hasDates = !!squad.lockedDates;
+  const lockCount = [hasDest, hasBudget, hasDates].filter(Boolean).length;
+  const progressPct = Math.round((lockCount / 3) * 100);
+  const isInProgress = squad.status === "planning" || squad.status === "voting";
 
   return (
     <motion.button
@@ -31,7 +41,7 @@ export function SquadCard({ squad, onSelect }: SquadCardProps) {
             {squad.name}
           </h3>
           <p className="font-mono text-sm text-ink-muted truncate">
-            {destination}
+            {squad.lockedDestination || destination}
           </p>
         </div>
         <span
@@ -46,6 +56,28 @@ export function SquadCard({ squad, onSelect }: SquadCardProps) {
           <Users className="w-4 h-4 text-ink-muted shrink-0" />
           <span className="font-mono text-sm text-ink">
             {squad.members.length} / {squad.memberLimit} members
+          </span>
+        </div>
+
+        {/* Lock progress */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            {[
+              { label: "Dest", locked: hasDest },
+              { label: "Budget", locked: hasBudget },
+              { label: "Dates", locked: hasDates },
+            ].map((step) => (
+              <div
+                key={step.label}
+                className={`w-2 h-2 rounded-full ${
+                  step.locked ? "bg-success" : "bg-ink/15"
+                }`}
+                title={`${step.label}: ${step.locked ? "Locked" : "Pending"}`}
+              />
+            ))}
+          </div>
+          <span className="font-mono text-[10px] text-ink-muted">
+            {lockCount}/3 decisions
           </span>
         </div>
 

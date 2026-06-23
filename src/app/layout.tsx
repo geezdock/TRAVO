@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Syne, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
+import { SquadProvider } from "@/lib/SquadContext";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -40,7 +42,14 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${syne.variable} ${jetbrainsMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
+        <Script
+          id="remove-bis"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `document.querySelectorAll('[bis_skin_checked]').forEach(function(el){el.removeAttribute("bis_skin_checked")})`,
+          }}
+        />
+        <SquadProvider>{children}</SquadProvider>
       </body>
     </html>
   );

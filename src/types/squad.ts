@@ -1,4 +1,4 @@
-export type SquadStatus = "planning" | "voting" | "booked";
+export type SquadStatus = "planning" | "voting" | "ready" | "pending" | "booked" | "cancelled";
 
 export type WorkspaceTab = "squad" | "destinations" | "dates" | "budget" | "polls";
 
@@ -50,11 +50,13 @@ export interface Squad {
   inviteCode: string;
   createdBy: string;
   destination?: string;
+  lockedDestination?: string;
   destinations: string[];
   members: SquadMember[];
   memberLimit: number;
   votes: DestinationVote[];
   budgetPerPerson: number;
+  lockedBudget?: number;
   budgetPreferences: BudgetPreference[];
   dateProposals: DateProposal[];
   lockedDates?: { start: string; end: string };

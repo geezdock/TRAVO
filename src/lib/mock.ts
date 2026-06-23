@@ -7,6 +7,7 @@ export const mockSquads: Squad[] = [
     inviteCode: "goa-trip-8f3a",
     createdBy: "me",
     destination: "Goa",
+    lockedDestination: "Goa",
     destinations: ["Goa", "Gokarna", "Pondicherry"],
     members: [
       { id: "me", name: "You", initial: "Y", color: "bg-accent", verified: true, joinedAt: "2026-06-15T10:00:00Z" },
